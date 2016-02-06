@@ -1,0 +1,31 @@
+Cache <- list(Matrixlist = list(matrix()),Inverselist = list(matrix()))
+
+ComputeInv <- function(x){
+
+        makeCacheMatrix <- function(x){ #x is a  matrix going to be discovered if already computed.
+                if(sum(sapply(Cache$Matrixlist,function(cache) identical(cache,x))) == 1){ #identical() is matrix-matching function if it is equal. I defined function(cache) inside the function sapply.
+                index <<- which(sapply(Cache$Matrixlist,function(cache) identical(cache,x))) #where the equal matrix which is already cached exist.
+                message("Already computed")
+                whether <<- T
+                } else {
+                Cache$Matrixlist[[length(Cache$Matrixlist)+1]] <<- x # newly setting matrix into the list.
+                whether <<- F
+                message("caching...")
+                }
+        }
+        
+        cacheSolve <- function(){
+                if(whether == T){
+                message("Inverse result - cache")
+                return(Cache$Inverselist[[index]])
+                } else {
+                Cache$Inverselist[[length(Cache$Inverselist)+1]] <<- solve(x)
+                message("Inverse result - computed for the first time")
+                return(Cache$Inverselist[[length(Cache$Inverselist)]])
+                }
+        }
+
+        makeCacheMatrix(x)
+        cacheSolve()
+
+}
